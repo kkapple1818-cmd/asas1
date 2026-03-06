@@ -49,7 +49,8 @@ select:focus{outline:none;border-color:#2196F3;box-shadow:0 0 0 3px rgba(33,150,
 .mulpum-font-control label{font-size:16px;font-weight:600;color:#455a64;white-space:nowrap;}
 .mulpum-font-control input[type="range"]{flex:1;height:8px;cursor:pointer;accent-color:#2196F3;}
 .mulpum-font-control span{font-size:16px;font-weight:600;color:#1976D2;min-width:60px;}
-.mulpum-table{width:100%;border-collapse:collapse;margin-top:20px;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.mulpum-table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.mulpum-table{width:100%;border-collapse:collapse;margin-top:20px;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);min-width:600px;}
 .mulpum-table td input,.mulpum-table td select{width:100%;padding:10px;border:1px solid #e0e0e0;font-size:14px;text-align:left;border-radius:4px;}
 .mulpum-table td input[type="text"]:focus,.mulpum-table td select:focus{border:2px solid #42a5f5;outline:none;}
 .mulpum-table tr:nth-child(even){background:#fafbfc;}
@@ -153,13 +154,108 @@ select:focus{outline:none;border-color:#2196F3;box-shadow:0 0 0 3px rgba(33,150,
 .main-row-done{background:#fff3f3 !important;opacity:.6;}
 .sector-section{margin-bottom:16px;}
 .sector-label{display:inline-block;padding:5px 16px;border-radius:8px;color:#fff;font-weight:700;font-size:14px;margin-bottom:6px;}
+.cb-result-table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.cb-result-table-wrap table{min-width:700px;}
+
+/* ========== 모바일 최적화 ========== */
 @media(max-width:768px){
-.container{padding:15px;}h1{font-size:18px;}.reset-button{padding:8px 16px;font-size:14px;}
-td{padding:8px;font-size:13px;}.tab-button{padding:10px 15px;font-size:14px;}
-.mulpum-announcement-input{font-size:36px;padding:16px;}.mulpum-announcement-preview{font-size:20px;}
-.modal-content,.load-modal-content{padding:20px;width:95%;}
-.action-bar{padding:16px;}
-.btn-reset,.btn-cloud{padding:12px 24px;font-size:14px;}
+  body{padding:8px;}
+  .container{padding:14px;border-radius:12px;}
+  .tabs{gap:6px;margin-bottom:12px;}
+  .tab-button{padding:12px 8px;font-size:14px;}
+
+  /* 헤더 */
+  .header-section{flex-direction:column;gap:12px;align-items:flex-start;margin-bottom:20px;padding-bottom:14px;}
+  h1{font-size:17px;}
+  .reset-button{padding:10px 18px;font-size:14px;width:100%;text-align:center;}
+  .header-section > div{width:100%;display:flex;gap:6px;}
+  .header-section > div > button,.header-section > div > .cloud-btn{flex:1;font-size:13px;padding:10px 8px;}
+
+  /* 적격심사 테이블 */
+  td,th{padding:8px 6px;font-size:12px;}
+  td:first-child{width:35%;}
+  input[type="number"],input[type="text"]{padding:6px;font-size:13px;}
+  select{padding:6px;font-size:13px;}
+  .section-title{font-size:14px;padding:10px 12px;margin:18px 0 10px 0;}
+  .formula-section{padding:14px;font-size:11px;}
+  .final-cell{font-size:16px;}
+
+  /* 물품투찰 공고번호 */
+  .mulpum-announcement-label{font-size:22px;}
+  .mulpum-announcement-input{font-size:28px;padding:14px;min-height:60px;}
+  .mulpum-announcement-preview{font-size:16px;padding:10px 14px;gap:10px;}
+  .mulpum-font-control{padding:10px;gap:8px;}
+  .mulpum-font-control label{font-size:13px;}
+  .mulpum-font-control span{font-size:13px;min-width:45px;}
+
+  /* 물품투찰 테이블 - 가로 스크롤 */
+  .mulpum-table{min-width:580px;}
+  .mulpum-table td input,.mulpum-table td select{padding:8px 4px;font-size:12px;}
+  .mulpum-bizno-cell{font-size:12px;padding:6px;}
+  .mulpum-bid-amount{padding:8px 6px;font-size:13px;}
+  .mulpum-base-auto{padding:8px 6px;font-size:12px;}
+
+  /* 액션바 */
+  .action-bar{padding:14px;gap:8px;}
+  .btn-reset,.btn-cloud{padding:12px 20px;font-size:14px;flex:1;}
+  .mulpum-manage-btn{padding:10px 14px;font-size:13px;}
+  .cloud-btn{padding:10px 14px;font-size:13px;}
+
+  /* 상호 버튼 */
+  .company-buttons{margin:15px 0;}
+  .cb-group{margin-bottom:12px;}
+  .cb-group-label{font-size:13px;padding:4px 10px;}
+  .cb-group-btns{gap:4px;}
+  .company-btn{padding:6px 10px;font-size:11px;border-radius:6px;}
+  .badge{min-width:16px;height:16px;line-height:16px;font-size:9px;top:-6px;right:-6px;}
+
+  /* 상세 결과 테이블 */
+  .cb-result{padding:10px;font-size:12px;}
+  .cb-result th{padding:8px 4px;font-size:11px;}
+  .cb-result td{padding:8px 4px;font-size:11px;}
+  .cb-result h3{font-size:15px;}
+  .sector-label{font-size:12px;padding:4px 10px;}
+
+  /* 모달 */
+  .modal-content,.load-modal-content{padding:16px;width:95%;max-height:85vh;border-radius:12px;}
+  .modal-header h2{font-size:17px;}
+  .modal-add-section{gap:6px;}
+  .modal-add-section input{padding:8px;font-size:13px;min-width:80px;}
+  .modal-add-btn{padding:8px 14px;font-size:13px;}
+  .modal-list-header{font-size:12px;}
+  .modal-list-header span{padding:8px 4px;}
+  .modal-list-item span{padding:8px 4px;font-size:12px;}
+  .modal-list-item .modal-btn-group{width:100px;padding:4px 6px;}
+  .modal-list-item .modal-btn-group button{padding:5px;font-size:11px;}
+
+  /* 불러오기 모달 */
+  .load-date-input{padding:8px;font-size:14px;width:100%;}
+  .load-search-btn,.load-complete-btn{padding:8px 14px;font-size:13px;}
+  .load-list-item{padding:10px;flex-wrap:wrap;gap:8px;}
+  .load-ann{font-size:13px;}
+  .load-time{font-size:11px;}
+  .load-select-btn,.load-delete-btn{padding:6px 12px;font-size:12px;}
+
+  /* 읽기전용 배너 */
+  .readonly-banner{font-size:13px;padding:10px;}
+  .exit-readonly-btn{font-size:12px;padding:6px 14px;}
+
+  /* 토스트 */
+  .copy-toast{top:auto;bottom:20px;right:10px;left:10px;text-align:center;font-size:14px;padding:12px 16px;border-radius:10px;}
+}
+
+/* 더 작은 화면 (아이폰 SE 등) */
+@media(max-width:380px){
+  body{padding:4px;}
+  .container{padding:10px;}
+  h1{font-size:15px;}
+  .tab-button{padding:10px 6px;font-size:13px;}
+  .mulpum-announcement-input{font-size:22px;padding:10px;}
+  .mulpum-announcement-preview{font-size:14px;}
+  .company-btn{padding:5px 7px;font-size:10px;}
+  .cb-result th{font-size:10px;padding:6px 2px;}
+  .cb-result td{font-size:10px;padding:6px 2px;}
+  .modal-content,.load-modal-content{padding:12px;width:98%;}
 }
 </style>
 </head>
@@ -245,10 +341,12 @@ td{padding:8px;font-size:13px;}.tab-button{padding:10px 15px;font-size:14px;}
 <div id="announcementPreview" class="mulpum-announcement-preview"></div>
 <div class="mulpum-font-control"><label>글자크기 조정:</label><input type="range" id="mulpumFontSlider" min="30" max="80" value="56" oninput="mulpumAdjustFont(this.value)"><span id="mulpumFontDisplay">56px</span></div>
 <div class="section-title">기초금액확인</div>
+<div class="mulpum-table-wrap">
 <table class="mulpum-table">
 <thead><tr><th style="width:12%;">상호</th><th style="width:16%;">사업자번호</th><th style="width:14%;">투찰율(%)</th><th style="width:18%;">기초금액(원)</th><th style="width:30%;">투찰금액(원)</th><th style="width:10%;">완료</th></tr></thead>
 <tbody id="mulpumTableBody"></tbody>
 </table>
+</div>
 <div class="action-bar">
 <button class="btn-reset" onclick="mulpumReset()">🔄 초기화</button>
 <button class="btn-cloud" onclick="cloudSave()">☁️ 클라우드 저장</button>
@@ -932,7 +1030,7 @@ function showCB(btn, company) {
     var sColor = SECTOR_COLORS[sec] || '#607d8b';
     var icon = sec === '나라장터' ? '🏛️' : sec === '국방' ? '🎖️' : sec === '수자원' ? '💧' : sec === '한수원' ? '⚡' : sec === '도로공사' ? '🛣️' : sec === '한전' ? '🔌' : '📦';
     html += '<div class="sector-section"><span class="sector-label" style="background:' + sColor + '">' + icon + ' ' + sec + ' (' + items.length + '건)</span>';
-    html += '<table><thead><tr><th>공고번호/공고명</th><th>대표자</th><th>사업자번호</th><th>투찰율</th><th>투찰금액</th><th>저장시간</th><th>완료</th></tr></thead><tbody>';
+    html += '<div class="cb-result-table-wrap"><table><thead><tr><th>공고번호/공고명</th><th>대표자</th><th>사업자번호</th><th>투찰율</th><th>투찰금액</th><th>저장시간</th><th>완료</th></tr></thead><tbody>';
     items.forEach(function(d, idx) {
       var rowId = 'cbrow_' + sec.replace(/\s/g, '') + '_' + idx;
       var annDisplay = '';
@@ -966,7 +1064,7 @@ function showCB(btn, company) {
       html += '<td style="text-align:center;"><input type="checkbox" class="cb-done-checkbox" onchange="toggleCBDoneCheckbox(this,\'' + rowId + '\')"></td>';
       html += '</tr>';
     });
-    html += '</tbody></table></div>';
+    html += '</tbody></table></div></div>';
   });
   res.style.display = 'block';
   res.innerHTML = html;
