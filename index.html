@@ -143,14 +143,13 @@ select:focus{outline:none;border-color:#2196F3;box-shadow:0 0 0 3px rgba(33,150,
 .cb-result th{background:linear-gradient(135deg,#42a5f5,#1976D2);color:#fff;padding:10px;font-size:13px;}
 .cb-result td{padding:10px;border:1px solid #e0e0e0;font-size:13px;color:#37474f;text-align:center;}
 .cb-result td:first-child{text-align:left;}
-.cb-ann-part{cursor:pointer;padding:2px 6px;border-radius:4px;transition:.2s;display:inline-block;}
-.cb-ann-part:hover{background:#e3f2fd;outline:1px solid #42a5f5;}
-.cb-ann-part.copied{background:#c8e6c9;}
-.cb-bid-copy{cursor:pointer;font-weight:700;color:#1565c0;}
-.cb-bid-copy:hover{background:#e3f2fd;border-radius:4px;}
 .cb-ann-copy-cell{cursor:pointer;transition:.2s;}
 .cb-ann-copy-cell:hover{background:#e3f2fd;}
 .cb-ann-copy-cell.copied{background:#c8e6c9;}
+.cb-ann-copy-cell.done-locked{cursor:default;pointer-events:none;}
+.cb-bid-copy{cursor:pointer;font-weight:700;color:#1565c0;}
+.cb-bid-copy:hover{background:#e3f2fd;border-radius:4px;}
+.cb-bid-copy.done-locked{cursor:default;color:#bdbdbd;pointer-events:none;}
 .cb-done-checkbox{width:20px;height:20px;cursor:pointer;accent-color:#00b894;}
 .cb-row-done{background:#f0faf7 !important;opacity:.6;}
 .main-row-done{background:#fff3f3 !important;opacity:.6;}
@@ -967,7 +966,7 @@ function showCB(btn, company) {
       html += '<td style="font-weight:600;color:#37474f;">' + ownerName + '</td>';
       html += '<td>' + formatBiznoDisplay(d.bizno) + '</td>';
       html += '<td>' + d.rate + '%</td>';
-      html += '<td><span class="cb-bid-copy" onclick="event.stopPropagation();copyPart(this,\'' + d.bid + '\')">' + d.bid + '</span></td>';
+      html += '<td><span class="cb-bid-copy" onclick="event.stopPropagation();copyBidCell(this,\'' + d.bid.replace(/'/g, "\\'") + '\')">' + d.bid + '</span></td>';
       html += '<td>' + d.time + '</td>';
       html += '<td style="text-align:center;"><input type="checkbox" class="cb-done-checkbox" onchange="toggleCBDoneCheckbox(this,\'' + rowId + '\')"></td>';
       html += '</tr>';
@@ -979,8 +978,20 @@ function showCB(btn, company) {
 }
 
 function copyAnnCell(el, txt) {
+  var row = el.closest('tr');
+  if (row && row.classList.contains('cb-row-done')) return;
   navigator.clipboard.writeText(txt).then(function() {
     showToast('📋 공고번호 복사완료: ' + txt);
+    el.classList.add('copied');
+    setTimeout(function() { el.classList.remove('copied'); }, 1000);
+  });
+}
+
+function copyBidCell(el, txt) {
+  var row = el.closest('tr');
+  if (row && row.classList.contains('cb-row-done')) return;
+  navigator.clipboard.writeText(txt).then(function() {
+    showToast('📋 복사완료: ' + txt);
     el.classList.add('copied');
     setTimeout(function() { el.classList.remove('copied'); }, 1000);
   });
@@ -990,8 +1001,16 @@ function toggleCBDoneCheckbox(cb, rowId) {
   var row = document.getElementById(rowId);
   if (cb.checked) {
     row.classList.add('cb-row-done');
+    var annCell = row.querySelector('.cb-ann-copy-cell');
+    var bidCell = row.querySelector('.cb-bid-copy');
+    if (annCell) annCell.classList.add('done-locked');
+    if (bidCell) bidCell.classList.add('done-locked');
   } else {
     row.classList.remove('cb-row-done');
+    var annCell = row.querySelector('.cb-ann-copy-cell');
+    var bidCell = row.querySelector('.cb-bid-copy');
+    if (annCell) annCell.classList.remove('done-locked');
+    if (bidCell) bidCell.classList.remove('done-locked');
   }
 }
 
