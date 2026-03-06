@@ -560,11 +560,22 @@ function mulpumUpdateCalc(){
     var r=parseFloat(document.getElementById('mulpumRate'+i).value.replace(/[^0-9.]/g,''))||0;
     var bid=baseVal*(r/100);
     var cell=document.getElementById('mulpumBidAmount'+i);
-    cell.textContent=bid>0?formatBidAmount(bid):'0';
+    if(bid>0){
+      if(baseVal>=10000000){
+        // 1,000만원 이상: 소수점 버림(절삭), 원단위까지만
+        cell.textContent=Math.floor(bid).toLocaleString();
+      }else{
+        // 1,000만원 미만: 소수점 포함
+        cell.textContent=formatBidAmount(bid);
+      }
+    }else{
+      cell.textContent='0';
+    }
     if(i>1){var a=document.getElementById('mulpumBaseAuto'+i);if(a)a.textContent=baseVal?parseInt(baseVal).toLocaleString():'0';}
   }
   mulpumSave();
 }
+
 
 function mulpumCopyBid(el){
   var t=el.textContent.trim();
