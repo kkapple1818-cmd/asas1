@@ -351,9 +351,8 @@ var TR=13;
 var SK='mulpum_data_v8';
 var CK='mulpum_companies_v1';
 
-// ★ 텔레그램 알림 설정
 var TELEGRAM_BOT_TOKEN='8366923802:AAGjPEchGfTRW7KTT7udGE-GdZ67OJ2Uw4U';
-var TELEGRAM_CHAT_IDS=['8189315762']; // 상대방 ID 추가 시: ['8189315762','상대방ID']
+var TELEGRAM_CHAT_IDS=['8189315762'];
 
 function sendTelegram(msg){
   TELEGRAM_CHAT_IDS.forEach(function(chatId){
@@ -766,8 +765,7 @@ function cloudSave(){
   var dateStr=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
   var timeStr=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0')+':'+String(now.getSeconds()).padStart(2,'0');
 
-  // ★ 상호 목록 텍스트 생성
-  var companyList=rows.map(function(r){return r.company;}).join(', ');
+  var companyList=rows.map(function(r){return r.company+' → '+r.bid+'원';}).join('\n');
 
   var saveData={announcement:ann,basePrice:baseVal,rows:rows,date:dateStr,time:timeStr,timestamp:firebase.firestore.FieldValue.serverTimestamp()};
   var annKey=getAnnKey(ann);
@@ -778,12 +776,12 @@ function cloudSave(){
       if(!confirm('「'+ann+'」 공고가 오늘('+dateStr+') 이미 저장되어 있습니다.\n덮어쓰시겠습니까?'))return;
       db.collection('bids').doc(existingDocId).update(saveData).then(function(){
         showToast('☁️ 덮어쓰기 완료!');
-        sendTelegram('🔄 <b>투찰 데이터 업데이트</b>\n\n📋 공고: '+ann+'\n👥 상호('+rows.length+'건): '+companyList+'\n📅 일시: '+dateStr+' '+timeStr);
+        sendTelegram('🔄 <b>투찰 데이터 업데이트</b>\n\n📋 공고: '+ann+'\n\n👥 상호('+rows.length+'건):\n'+companyList);
       }).catch(function(err){alert('저장 오류: '+err.message);});
     }else{
       db.collection('bids').add(saveData).then(function(){
         showToast('☁️ Firebase 저장 완료!');
-        sendTelegram('💾 <b>투찰 데이터 신규저장</b>\n\n📋 공고: '+ann+'\n👥 상호('+rows.length+'건): '+companyList+'\n📅 일시: '+dateStr+' '+timeStr);
+        sendTelegram('💾 <b>투찰 데이터 신규저장</b>\n\n📋 공고: '+ann+'\n\n👥 상호('+rows.length+'건):\n'+companyList);
       }).catch(function(err){alert('저장 오류: '+err.message);});
     }
   }).catch(function(err){alert('중복 확인 오류: '+err.message);});
