@@ -527,7 +527,6 @@ function doPwChange(){
   });
 }
 
-// 세션 체크 - 이미 로그인했으면 바로 앱 표시
 if(sessionStorage.getItem('loggedIn')==='true'){
   document.getElementById('loginOverlay').style.display='none';
   document.getElementById('appWrap').style.display='block';
@@ -592,6 +591,8 @@ function loadCompaniesFromFirebase(){
   db.collection('companies').doc('list').get().then(function(doc){
     if(doc.exists&&doc.data().data){
       var fbData=doc.data().data;
+      /* ★ 수정: Firebase에서 불러올 때 가나다순 정렬 */
+      fbData.sort(function(a,b){return a.name.localeCompare(b.name,'ko');});
       localStorage.setItem(CK,JSON.stringify(fbData));
       if(mulpumInited)mulpumRefreshSelects();
     }
@@ -695,6 +696,8 @@ function buildMulpumTable(){
 
 function mulpumRefreshSelects(){
   var cs=gC();
+  /* ★ 셀렉트 옵션도 가나다순으로 표시 */
+  cs.sort(function(a,b){return a.name.localeCompare(b.name,'ko');});
   for(var i=1;i<=TR;i++){
     var sel=document.getElementById('mulpumCompany'+i),cur=sel.value;
     var h='<option value="">선택</option><option value="__direct__">직접입력</option>';
@@ -711,7 +714,10 @@ function mulpumOnCompanySelect(row){
     if(!name){sel.value='';biz.textContent='';mulpumSave();return;}
     var bizno=prompt('사업자등록번호 입력 (선택):');
     var owner=prompt('대표자명 입력 (선택):');
-    var cs=gC();cs.push({name:name,bizno:bizno||'',owner:owner||''});sC(cs);
+    var cs=gC();cs.push({name:name,bizno:bizno||'',owner:owner||''});
+    /* ★ 수정: 직접입력 추가 시에도 가나다순 정렬 */
+    cs.sort(function(a,b){return a.name.localeCompare(b.name,'ko');});
+    sC(cs);
     mulpumRefreshSelects();sel.value=name;
     biz.textContent=formatBiznoDisplay(bizno||'');
   }else if(sel.value){
@@ -883,7 +889,10 @@ function addCompany(){
   if(!n){alert('상호명을 입력하세요.');return;}
   var cs=gC();
   if(cs.find(function(c){return c.name===n;})){alert('이미 등록된 상호입니다.');return;}
-  cs.push({name:n,bizno:b,owner:o});sC(cs);
+  cs.push({name:n,bizno:b,owner:o});
+  /* ★ 수정: 추가 후 가나다순 정렬 */
+  cs.sort(function(a,b){return a.name.localeCompare(b.name,'ko');});
+  sC(cs);
   document.getElementById('newCompanyName').value='';
   document.getElementById('newCompanyBizno').value='';
   document.getElementById('newCompanyOwner').value='';
@@ -893,6 +902,9 @@ function addCompany(){
 function renderCompanyList(){
   var cs=gC(),ct=document.getElementById('companyListContainer');
   if(!cs.length){ct.innerHTML='<div class="modal-empty">등록된 상호가 없습니다.</div>';return;}
+  /* ★ 수정: 렌더링 전 가나다순 정렬 */
+  cs.sort(function(a,b){return a.name.localeCompare(b.name,'ko');});
+  localStorage.setItem(CK,JSON.stringify(cs));
   var h='';
   cs.forEach(function(c,i){
     h+='<div class="modal-list-item"><span>'+c.name+'</span><span>'+formatBiznoDisplay(c.bizno)+'</span><span>'+(c.owner||'')+'</span><div class="modal-btn-group"><button class="modal-edit-btn" onclick="editCompany('+i+')">수정</button><button class="modal-delete-btn" onclick="deleteCompany('+i+')">삭제</button></div></div>';
@@ -905,7 +917,10 @@ function editCompany(i){
   var n=prompt('상호명:',c.name);if(!n)return;
   var b=prompt('사업자등록번호:',c.bizno);
   var o=prompt('대표자명:',c.owner||'');
-  cs[i]={name:n,bizno:b||'',owner:o||''};sC(cs);
+  cs[i]={name:n,bizno:b||'',owner:o||''};
+  /* ★ 수정: 수정 후에도 가나다순 정렬 */
+  cs.sort(function(a,b){return a.name.localeCompare(b.name,'ko');});
+  sC(cs);
   renderCompanyList();mulpumRefreshSelects();showToast('✏️ 수정 완료!');
 }
 
